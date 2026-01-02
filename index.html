@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gold Loan EMI Calculator | தங்க கடன் EMI கணக்கிடும் கருவி</title>
+
+<meta name="description" content="Gold Loan EMI Calculator with Gram or Pavan selection, user entered gold rate, loan percentage and interest. Tamil & English.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6f4;
+  margin:0;
+  padding:0;
+}
+.container{
+  max-width:500px;
+  background:#ffffff;
+  margin:30px auto;
+  padding:25px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+h1{
+  text-align:center;
+  color:#1b5e20;
+}
+label{
+  font-weight:bold;
+  margin-top:15px;
+  display:block;
+}
+select,input{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  font-size:16px;
+}
+button{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  background:#1b5e20;
+  color:white;
+  font-size:18px;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
+}
+button:hover{
+  background:#2e7d32;
+}
+#result{
+  margin-top:20px;
+  background:#e8f5e9;
+  padding:15px;
+  border-radius:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Gold Loan EMI Calculator<br>தங்கக் கடன் கணிப்பான்</h1>
+
+<label>Weight Unit (எடை அலகு)</label>
+<select id="unit">
+  <option value="gram">Gram</option>
+  <option value="pavan">Pavan (1 பவன் = 8 கிராம்)</option>
+</select>
+
+<label>Gold Weight (எடை)</label>
+<input type="number" id="weight" placeholder="Eg: 10">
+
+<label>Gold Rate (₹ per gram)</label>
+<input type="number" id="rate" placeholder="Eg: 6500">
+
+<label>Loan Percentage (%)</label>
+<input type="number" id="loanPercent" placeholder="Eg: 75">
+
+<label>Interest Rate (% per year)</label>
+<input type="number" id="interest" placeholder="Eg: 12">
+
+<label>Tenure (Months)</label>
+<input type="number" id="tenure" placeholder="Eg: 12">
+
+<button onclick="calculateEMI()">Calculate EMI</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+function calculateEMI(){
+
+  let unit = document.getElementById("unit").value;
+  let weight = parseFloat(document.getElementById("weight").value);
+  let rate = parseFloat(document.getElementById("rate").value);
+  let loanPercent = parseFloat(document.getElementById("loanPercent").value);
+  let interest = parseFloat(document.getElementById("interest").value);
+  let tenure = parseFloat(document.getElementById("tenure").value);
+
+  if(
+    isNaN(weight) || isNaN(rate) || isNaN(loanPercent) ||
+    isNaN(interest) || isNaN(tenure)
+  ){
+    alert("Please fill all fields correctly");
+    return;
+  }
+
+  // Convert pavan to gram
+  if(unit === "pavan"){
+    weight = weight * 8;
+  }
+
+  // Gold value
+  let goldValue = weight * rate;
+
+  // Loan amount
+  let loanAmount = (goldValue * loanPercent) / 100;
+
+  // EMI calculation
+  let monthlyRate = interest / 12 / 100;
+  let emi = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, tenure)) /
+            (Math.pow(1 + monthlyRate, tenure) - 1);
+
+  document.getElementById("result").innerHTML = `
+    <h3>Result</h3>
+    <p><b>Gold Value:</b> ₹ ${goldValue.toFixed(0)}</p>
+    <p><b>Eligible Loan Amount:</b> ₹ ${loanAmount.toFixed(0)}</p>
+    <p><b>Monthly EMI:</b> ₹ ${emi.toFixed(0)}</p>
+  `;
+}
+</script>
+
+</body>
+</html>
